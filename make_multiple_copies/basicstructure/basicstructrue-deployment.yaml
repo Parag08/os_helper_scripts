@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: consul
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+      - name: consul
+        securityContext:
+          privileged: true
+        image: progrium/consul
+        imagePullPolicy: Always
+        args: ["-server","-bootstrap"]
+        ports:
+            - containerPort: 8300
+              name: server
+            - containerPort: 8301
+              name: serflan-tcp
+              protocol: "TCP"
+            - containerPort: 8301
+              name: serflan-udp
+              protocol: "UDP"
+            - containerPort: 8302
+              name: serfwan-tcp
+              protocol: "TCP"
+            - containerPort: 8302
+              name: serfwan-udp
+              protocol: "UDP"
+            - containerPort: 8400
+              name: rpc-port
+            - containerPort: 8500
+              name: api-port
+            - containerPort: 8600
+              name: consuldns-tcp
+              protocol: "TCP"
+            - containerPort: 8600
+              name: consuldns-udp
+              protocol: "UDP"
